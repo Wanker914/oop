@@ -1,9 +1,9 @@
 # Программирование на языке высокого уровня (Python).
-# Задание №______. Вариант !!!
+# Задание № 04_03_03. Вариант 9
 #
-# Выполнил: Фамилия И.О.
-# Группа: !!!
-# E-mail: !!!
+# Выполнил: Кобыш В.Д.
+# Группа: ПИН-б-о-22-1
+# E-mail: kobysh_vlad@mail.ru
 
 
 class TimeDeposit:
@@ -30,8 +30,10 @@ class TimeDeposit:
 
     def __init__(self, name, interest_rate, period_limit, sum_limit):
         """Инициализировать атрибуты класса."""
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        self.name = name
+        self._interest_rate = interest_rate
+        self._period_limit = period_limit
+        self._sum_limit = sum_limit
 
         # Проверить значения
         self._check_self()
@@ -47,8 +49,11 @@ class TimeDeposit:
         Срок (мес.):        [6; 18)
         Сумма:              [1,000; 100,000)
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        return f'Наименование:       {self.name}\n' \
+               f'Валюта:             {self.currency}\n' \
+               f'Процентная ставка:  {self._interest_rate}\n' \
+               f'Срок (мес.):        [{self._period_limit[0]}; {self._period_limit[1]})\n' \
+               f'Сумма:              [{self._sum_limit[0]}; {self._sum_limit[1]})'
 
     @property
     def currency(self):
@@ -107,8 +112,7 @@ class BonusTimeDeposit(TimeDeposit):
 
     def __init__(self, name, interest_rate, period_limit, sum_limit, bonus):
         """Инициализировать атрибуты класса."""
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        self._bonus = bonus
 
         super().__init__(name, interest_rate, period_limit, sum_limit)
 
@@ -127,16 +131,20 @@ class BonusTimeDeposit(TimeDeposit):
         Бонус (%):          5
         Бонус (мин. сумма): 2,000
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        return super().__str__() + f'\nБонус (мин. сумма): {self._bonus["sum"]:.2f}'
 
     def _check_self(self):
         """Проверить, что данные депозита являются допустимыми.
 
         Дополняем родительский метод проверкой бонуса.
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        assert sorted(self._bonus.keys()) == ['percent', 'sum'], \
+            'Неверно указан бонус по вкладу'
+        assert isinstance(self._bonus['sum'], (int, float)), \
+            'Неверно указан бонус по вкладу'
+        assert isinstance(self._bonus['percent'], int), \
+            'Неверно указан бонус по вкладу'
+        super()._check_self()
 
     def get_profit(self, initial_sum, period):
         """Вернуть прибыль по вкладу вклада клиента.
@@ -152,8 +160,11 @@ class BonusTimeDeposit(TimeDeposit):
         Далее, если первоначальная сумма > необходимой,
         начисляется бонус.
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        profit = super().get_profit(initial_sum, period)
+        if initial_sum > self._bonus['sum']:
+            profit *= 1 + self._bonus['percent'] / 100
+
+        return profit
 
 
 class CompoundTimeDeposit(TimeDeposit):
@@ -173,8 +184,7 @@ class CompoundTimeDeposit(TimeDeposit):
         Сумма:              [1,000; 100,000)
         Капитализация %   : Да
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        return super().__str__() + f'\nКапитализация %   : Да'
 
     def get_profit(self, initial_sum, period):
         """Вернуть прибыль по вкладу вклада клиента.
@@ -193,8 +203,8 @@ class CompoundTimeDeposit(TimeDeposit):
           первоначальная_сумма * (1 + % / 100 / 12) ** период -
           первоначальная_сумма
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        super()._check_user_params(initial_sum, period)
+        return initial_sum * (1 + self._interest_rate / 100 / 12) ** period - initial_sum
 
 # ---
 
@@ -210,6 +220,5 @@ deposits = (
     BonusTimeDeposit("Бонусный 2", **deposits_data,
                      bonus=dict(percent=5, sum=2000)),
     CompoundTimeDeposit("С капитализацией", **deposits_data)
-    raise NotImplementedError
-    # Уберите raise и добавьте несколько вкладов
+
 )

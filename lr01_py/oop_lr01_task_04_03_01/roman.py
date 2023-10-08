@@ -1,9 +1,9 @@
 # Программирование на языке высокого уровня (Python).
-# Задание №______. Вариант !!!
+# Задание № 04_03_01. Вариант 9
 #
-# Выполнил: Фамилия И.О.
-# Группа: !!!
-# E-mail: !!!
+# Выполнил: Кобыш В.Д.
+# Группа: ПИН-б-о-22-1
+# E-mail: kobysh_vlad@mail.ru
 
 
 class Roman:
@@ -40,8 +40,7 @@ class Roman:
             value (другой тип):  возбудить исключение TypeError.
         """
         if not isinstance(value, (int, str)):
-            raise TypeError("Не могу создать римское число из {0}".
-                            format(type(value)))
+            raise TypeError("Не могу создать римское число из {0}".format(type(value)))
 
         if isinstance(value, int):
             self.__check_arabic(value)
@@ -59,8 +58,13 @@ class Roman:
                 или
             other (другой тип):  возбудить исключение TypeError.
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        if not isinstance(other, (Roman, int)):
+            raise TypeError('Не могу складывать числа и не числа')
+
+        if isinstance(other, int):
+            return Roman(self.arabic + other)
+        elif isinstance(other, Roman):
+            return Roman(self.arabic + other.arabic)
 
     def __sub__(self, other):
         """Создать новый объект как разность self и other.
@@ -72,8 +76,13 @@ class Roman:
                 или
             other (другой тип):  возбудить исключение TypeError.
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        if not isinstance(other, (Roman, int)):
+            raise TypeError('Не могу складывать числа и не числа')
+
+        if isinstance(other, int):
+            return Roman(self.arabic - other)
+        elif isinstance(other, Roman):
+            return Roman(self.arabic - other.arabic)
 
     def __mul__(self, other):
         """Создать новый объект как произведение self и other.
@@ -85,8 +94,13 @@ class Roman:
                 или
             other (другой тип):  возбудить исключение TypeError.
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        if not isinstance(other, (Roman, int)):
+            raise TypeError('Не могу складывать числа и не числа')
+
+        if isinstance(other, int):
+            return Roman(self.arabic * other)
+        elif isinstance(other, Roman):
+            return Roman(self.arabic * other.arabic)
 
     def __floordiv__(self, other):
         """Создать новый объект как частное self и other.
@@ -98,8 +112,13 @@ class Roman:
                 или
             other (другой тип):  возбудить исключение TypeError.
         """
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        if not isinstance(other, (Roman, int)):
+            raise TypeError('Не могу складывать числа и не числа')
+
+        if isinstance(other, int):
+            return Roman(self.arabic // other)
+        elif isinstance(other, Roman):
+            return Roman(self.arabic // other.arabic)
 
     def __truediv__(self, other):
         """Создать новый объект как частное self и other.
@@ -124,21 +143,20 @@ class Roman:
     def __check_arabic(value):
         """Возбудить исключение ValueError, если 'value' не принадлежит
         [ARABIC_MIN; ARABIC_MIN]."""
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        if not Roman.ARABIC_MIN <= value <= Roman.ARABIC_MAX:
+            raise ValueError(f'Число должно лежать на отрезке [{Roman.ARABIC_MIN}; {Roman.ARABIC_MAX}]')
 
     @staticmethod
     def __check_roman(value):
         """Возбудить исключение ValueError, если 'value' содержит
         недопустимые символы (не входящие в LETTERS)."""
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        if any(i not in Roman.LETTERS for i in value):
+            raise ValueError(f'Римское число должно содержать только символы из набора {Roman.LETTERS}')
 
     @property
     def arabic(self):
         """Вернуть арабское представление числа."""
-        raise NotImplementedError
-        # Уберите raise и добавьте необходимый код
+        return self._arabic
 
     @staticmethod
     def to_arabic(roman):
@@ -154,9 +172,7 @@ class Roman:
             """Вернуть арабское значение римской цифры 'letter'.
 
             Регистр не учитывается."""
-            raise NotImplementedError
-            # Уберите raise и добавьте необходимый код
-
+            return Roman.NUMBERS[Roman.LETTERS.index(letter)]
         Roman.__check_roman(roman)
 
         i = 0  # Позиция в строке roman
