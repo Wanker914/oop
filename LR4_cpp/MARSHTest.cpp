@@ -1,7 +1,6 @@
 #include "MARSH.h"
 #include <cassert>
 #include <iostream>
-#include <windows.h>
 
 using namespace std;
 
