@@ -5,7 +5,7 @@
 #include "MARSH.h"
 #include "MARSHTest.h"
 
-int main(int argc, char* argv[]) {
+int main() {
 
     setlocale(LC_ALL,"Russian");
     SetConsoleCP(1251);
@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 
     testMarsh();
 
-    const int ARRAY_SIZE = 3;
+    const int ARRAY_SIZE = 8;
     MARSH marshArray[ARRAY_SIZE];
 
     // Ввод данных с клавиатуры
