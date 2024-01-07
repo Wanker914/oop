@@ -5,6 +5,7 @@
 
 class Game {
 public:
+
     Game() : board(9, ' ') {}
 
     void start() {
@@ -42,6 +43,32 @@ public:
         }
     }
 
+    void makeMove(int move, char currentPlayer) {
+        board[move - 1] = currentPlayer;
+    }
+
+    char getWinner() const {
+        // Проверка горизонтальных и вертикальных линий
+        for (int i = 0; i < 3; ++i) {
+            if (board[i] == board[i + 3] && board[i] == board[i + 6] && board[i] != ' ') {
+                return board[i];
+            }
+            if (board[i * 3] == board[i * 3 + 1] && board[i * 3] == board[i * 3 + 2] && board[i * 3] != ' ') {
+                return board[i * 3];
+            }
+        }
+
+        // Проверка диагональных линий
+        if ((board[0] == board[4] && board[0] == board[8] && board[0] != ' ') ||
+            (board[2] == board[4] && board[2] == board[6] && board[2] != ' ')) {
+            return board[4];
+        }
+
+        return ' ';
+    }
+
+private:
+
     void drawBoard() const {
         std::cout << " 1 | 2 | 3 \n";
         std::cout << "---+---+---\n";
@@ -70,32 +97,8 @@ public:
         return (move >= 1 && move <= 9 && board[move - 1] == ' ');
     }
 
-    void makeMove(int move, char currentPlayer) {
-        board[move - 1] = currentPlayer;
-    }
-
     bool isGameOver() const {
         return (getWinner() != ' ' || std::count(board.begin(), board.end(), ' ') == 0);
-    }
-
-    char getWinner() const {
-        // Проверка горизонтальных и вертикальных линий
-        for (int i = 0; i < 3; ++i) {
-            if (board[i] == board[i + 3] && board[i] == board[i + 6] && board[i] != ' ') {
-                return board[i];
-            }
-            if (board[i * 3] == board[i * 3 + 1] && board[i * 3] == board[i * 3 + 2] && board[i * 3] != ' ') {
-                return board[i * 3];
-            }
-        }
-
-        // Проверка диагональных линий
-        if ((board[0] == board[4] && board[0] == board[8] && board[0] != ' ') ||
-            (board[2] == board[4] && board[2] == board[6] && board[2] != ' ')) {
-            return board[4];
-        }
-
-        return ' ';
     }
 
     int getComputerMove() const {
@@ -110,4 +113,5 @@ public:
     }
 
     std::vector<char> board;
+
 };
